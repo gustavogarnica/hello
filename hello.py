@@ -1,13 +1,19 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from socketserver import ThreadingMixIn, socket 
 import threading
+import logging 
 import sys
 
 
 class Handler(BaseHTTPRequestHandler):
     hostname = socket.gethostname()
 
+    logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d/%b/%Y %H:%M:%S')
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
     def do_GET(self):
+        self.logger.info(f"Request from: {self.client_address[0]}")
         self.send_response(200)
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.end_headers()
